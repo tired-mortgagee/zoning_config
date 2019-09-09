@@ -1,5 +1,19 @@
 #!/usr/bin/python
 
+#########################################################################################
+#########################################################################################
+##
+## Zoning Configuration Script
+##
+## tired.mortgagee@gmail.com
+## v0.2 2019.09.09.
+## change log at bottom of this file
+##
+## current limitations
+## - only MDS zoning configurations, only device-aliases
+## - converts shorthand to MDS config only (not the other way)
+##
+
 import os
 import re
 import csv
@@ -74,14 +88,14 @@ def parse_input_line(string_input,int_input):
          sys.exit("error 0x102: incorrect syntax in second argument in input file on line number "+str(int_input))
       if(len(list_input[2].split(",")) != len(list_input[3].split(","))):
          sys.exit("error 0x103: number of sub-arguments does not match in third argument and fourth argument in input file on line number "+str(int_input))
-      obj_regex = re.compile(r'^[a-zA-Z0-9]+$')
+      obj_regex = re.compile(r'^[a-zA-Z0-9_]+$')
       for string_hba in list_input[2].split(","):
          if(not(obj_regex.match(string.strip(string_hba)))):
             sys.exit("error 0x104: incorrect syntax in sub-argument "+string_hba+ " of third argument in input file on line number "+str(int_input))
-      obj_regex = re.compile(r'^[0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{2}$')
+      obj_regex = re.compile(r'^[0-9a-z]{2}:[0-9a-z]{2}:[0-9a-z]{2}:[0-9a-z]{2}:[0-9a-z]{2}:[0-9a-z]{2}:[0-9a-z]{2}:[0-9a-z]{2}$')
       for string_wwpn in list_input[3].split(","):
          if(not(obj_regex.match(string.strip(string_wwpn)))):
-            sys.exit("error 0x104: incorrect syntax in sub-argument "+string_wwpn+ " of third argument in input file on line number "+str(int_input))
+            sys.exit("error 0x105: incorrect syntax in sub-argument "+string_wwpn+ " of fourth argument in input file on line number "+str(int_input))
       # target
       if(list_input[0] == "t"):
          if(bool_debug): print "adding target "+list_input[1]+" "+list_input[2]+" "+list_input[3]
@@ -218,3 +232,13 @@ if(bool_debug):
    print "# dump zones"
    for obj_zone in set_zones:
       print string.join(obj_zone.members)
+
+#########################################################################################
+#########################################################################################
+##
+## Change Log
+##
+## 2019.09.06   Initial release
+## 2019.09.09   Fixed WWPN and HBA regex issues
+##
+
